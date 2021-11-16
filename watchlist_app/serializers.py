@@ -1,21 +1,17 @@
+from django.db import models
+from django.db.models import fields
 from django.utils.translation import activate
-from watchlist_app.models import Movie
+from watchlist_app.models import WatchList, StreamPlatform
 from rest_framework import serializers
 
+class StreamPlatformSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StreamPlatform
+        fields = "__all__"
 
-class MovieSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField()
-    description = serializers.CharField()
-    active = serializers.BooleanField()
+class WatchListSerializer(serializers.Serializer):
 
-    def create(self, validated_data):
-        return Movie.objects.create(**validated_data)
+    class Meta:
+        model = WatchList
+        fiels = "__all__"
 
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.description = validated_data.get(
-            'description', instance.description)
-        instance.active = validated_data.get('active', instance.active)
-        instance.save()
-        return instance
